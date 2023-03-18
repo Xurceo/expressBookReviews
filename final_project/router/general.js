@@ -20,11 +20,11 @@ public_users.post("/register", (req,res) => {
 
 public_users.get('/',function (req, res) {
     new Promise((resolve, reject) => {
-        resolve(books).then(
+        resolve(books)
+    }).then(
         (book) => res.send(JSON.stringify(book, null, 4)),
         (error) => res.send(error)
         )
-    })
 });
 
 public_users.get('/isbn/:isbn',function (req, res) {
