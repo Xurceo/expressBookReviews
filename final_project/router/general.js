@@ -20,25 +20,26 @@ public_users.post("/register", (req,res) => {
 
 public_users.get('/',function (req, res) {
     new Promise((resolve, reject) => {
-        res.send(JSON.stringify(books, null, 4))
-        resolve;
+        resolve(books).then(
+        (book) => res.send(JSON.stringify(book, null, 4)),
+        (error) => res.send(error)
+        )
     })
 });
 
 public_users.get('/isbn/:isbn',function (req, res) {
-  const isbn = req.params.isbn
+  const book = books[req.params.isbn]
   new Promise((resolve, reject) => {
-    if(books[isbn]){
-        res.send(books[isbn])
-        resolve;
+    if(book){
+        resolve(book);
     }
     else{
-        res.send({message: "There is no books with such isbn!"})
-        reject;
+        reject("There is no book with such isbn");
     }
-    resolve;
-})
- });
+}).then(
+    (book) => res.send(JSON.stringify(book, null, 4)),
+    (error) => res.send(error)
+ )});
   
 public_users.get('/author/:author',function (req, res) {
     let resBooks = []
@@ -48,9 +49,10 @@ public_users.get('/author/:author',function (req, res) {
             resBooks.push(books[key])
         }
       }
-    res.send(resBooks)
-    resolve;
-})});
+}).then(
+    (book) => res.send(JSON.stringify(resBooks, null, 4)),
+    (error) => res.send(error)
+ )});
 
 // Get all books based on title
 public_users.get('/title/:title',function (req, res) {
@@ -63,7 +65,10 @@ public_users.get('/title/:title',function (req, res) {
       }
     res.send(resBooks)
     resolve;
-})});
+}).then(
+    (book) => res.send(JSON.stringify(resBooks, null, 4)),
+    (error) => res.send(error)
+ )});
 
 //  Get book review
 public_users.get('/review/:isbn',function (req, res) {
